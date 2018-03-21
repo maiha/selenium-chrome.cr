@@ -1,0 +1,12 @@
+name: selenium-chrome
+version: 0.1.0
+
+authors:
+  - maiha <maiha@wota.jp>
+
+dependencies:
+  selenium:
+    github: ysbaddaden/selenium-webdriver-crystal
+    branch: master
+              
+license: MIT
