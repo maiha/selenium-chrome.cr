@@ -1,4 +1,4 @@
-# selenium-chrome.cr
+# selenium-chrome.cr [![Build Status](https://travis-ci.org/maiha/selenium-chrome.cr.svg?branch=master)](https://travis-ci.org/maiha/selenium-chrome.cr)
 
 A handy and thin wrapper for `selenium-webdriver-crystal`.
 
@@ -6,13 +6,19 @@ A handy and thin wrapper for `selenium-webdriver-crystal`.
 
 ## Component
 
-- Selenium Server (You must prepare)
-  - [ ] server: docker [selenium/standalone-chrome-debug:3.11.0-bismuth](https://hub.docker.com/r/selenium/standalone-chrome-debug/)
-  - [ ] driver: chrome (bundled in above image)
+- Selenium Server (**You must prepare**)
+  - [ ] server: docker [selenium/standalone-chrome-debug:3.11.0](https://hub.docker.com/r/selenium/standalone-chrome-debug/)
+  - [x] driver: chrome (bundled in above image)
 - Selenium Client
   - [x] driver: https://github.com/ysbaddaden/selenium-webdriver-crystal
   - [x] helper: THIS REPOSITORY (provides handy dsl like `find`)
-  - [ ] client: Please see "USAGE" and write as you like.
+  - [ ] client: Please see "USAGE" and **write as you like**.
+
+## Prepare Server
+The simplest way is
+```shell
+docker run -d -p 4444:4444 selenium/standalone-chrome:3.11.0
+```
 
 ## Usage
 

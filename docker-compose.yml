@@ -1,0 +1,17 @@
+version: "2"
+
+services:
+  selenium:
+    container_name: selenium
+    image: selenium/standalone-chrome:3.11.0
+    volumes:
+      - /dev/shm:/dev/shm
+  crystal:
+    container_name: crystal
+    image: crystallang/crystal:0.24.2
+    command: crystal --version
+    volumes:
+      - .:/mnt
+    working_dir: /mnt
+    depends_on:
+      - selenium
