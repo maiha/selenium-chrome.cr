@@ -21,26 +21,38 @@ class Selenium::Chrome
     end
 
     def fill(by : Symbol, selector : String, value, parent : WebElement? = nil)
-      find_element(by, selector, parent).send_keys(value)
-    end
-
-    def fill(target : String, value, parent : WebElement? = nil)
-      find_element(target, parent).send_keys(value)
+      find("#{by}:#{selector}", parent).send_keys(value)
     end
 
     # def return(target : String, parent : WebElement? = nil)
     #   fill(target, Keys::RETURN, parent)
     # end
 
-    def find_element(target : String, *args)
-      case target
-      when /^css:(.*)/
-        find_element(:css, $1, *args)
-      when /^id:(.*)/
-        find_element(:id, $1, *args)
-      else
-        raise ArgumentError.new("find_element must start with 'css:' or 'id:', but got '#{target}'")
+    def find(id : String? = nil, css : String? = nil, parent : WebElement? = nil)
+      if id && css
+        raise ArgumentError.new("both 'css:' and 'id:' exist")
       end
+
+      # first, parse css where no prefix exists
+      if css
+        return find_element(:css, css, parent)
+      end
+
+      # second, parse id where it may contains prefix 'id:' or 'css:'
+      case id
+      when /^id:(.*)/
+        return find_element(:id, $1, parent)
+      when /^css:(.*)/
+        return find_element(:css, $1, parent)
+      end
+
+      # third, parse as id for the case of invoking `find(id: "xxx")`
+      if id
+        return find_element(:id, id, parent)
+      end
+      
+      # finally, we can't find any args about target
+      raise ArgumentError.new("no element targets found")
     end
   end
 

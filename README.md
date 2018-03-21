@@ -6,13 +6,25 @@ A handy and thin wrapper for `selenium-webdriver-crystal`.
 
 ## Component
 
-- Selenium Server
-  - server: docker selenium/standalone-chrome-debug:3.11.0-bismuth
-  - driver: chrome (bundled in above image)
+- Selenium Server (You must prepare)
+  - [ ] server: docker [selenium/standalone-chrome-debug:3.11.0-bismuth](https://hub.docker.com/r/selenium/standalone-chrome-debug/)
+  - [ ] driver: chrome (bundled in above image)
 - Selenium Client
-  - driver: https://github.com/ysbaddaden/selenium-webdriver-crystal
-  - helper: THIS REPOSITORY (provides handy accessors and dsl)
-  - client: Please see "USAGE" and write as you like.
+  - [x] driver: https://github.com/ysbaddaden/selenium-webdriver-crystal
+  - [x] helper: THIS REPOSITORY (provides handy dsl like `find`)
+  - [ ] client: Please see "USAGE" and write as you like.
+
+## Usage
+
+```crystal
+require "selenium-chrome"
+
+session = Selenium::Chrome.new
+session.open "https://github.com/maiha/selenium-chrome.cr"
+h1 = session.find(css: "article>h1")
+p h1.text # => "selenium-chrome.cr"
+session.close
+```
 
 ## Installation
 
@@ -23,15 +35,6 @@ dependencies:
   selenium-chrome:
     github: maiha/selenium-chrome.cr
     version: 0.1.0
-```
-
-## Usage
-
-```crystal
-require "selenium-chrome"
-
-session = Selenium::Chrome.new
-session.open "https://github.com/maiha/selenium-chrome.cr"
 ```
 
 ## Development

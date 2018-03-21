@@ -1,8 +1,8 @@
 require "./chrome/**"
 
 class Selenium::Chrome
-  def initialize(capabilities = CAPABILITIES)
-    driver   = Selenium::Webdriver.new
+  def initialize(driver : Webdriver? = nil, capabilities = CAPABILITIES)
+    driver ||= Selenium::Webdriver.new
     @session = Selenium::Session.new(driver, capabilities)
   end
 
