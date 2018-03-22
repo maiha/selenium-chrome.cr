@@ -39,12 +39,19 @@ module Selenium
       find_elements(:css, *args)
     end
 
-    def fill(by : Symbol, selector : String, value, parent : WebElement? = nil)
-      find("#{by}:#{selector}", parent).send_keys(value)
+    def fill(by : Symbol, selector : String, value, parent : WebElement? = nil) : WebElement
+      fill("#{by}:#{selector}", parent)
     end
 
-    def fill(target : String, value, parent : WebElement? = nil)
-      find("#{target}", parent).send_keys(value)
+    def fill(target : String, value, parent : WebElement? = nil) : WebElement
+      e = find("#{target}", parent)
+      e.value = value
+      return e
+    end
+
+    def fill!(target : String, value, parent : WebElement? = nil)
+      e = fill(target, value, parent)
+      wait { e.value == value }
     end
 
     # def return(target : String, parent : WebElement? = nil)
@@ -98,7 +105,7 @@ module Selenium
 
     ensure
       if v
-        logger.debug("element found: '#{clue}'")
+        logger.debug("element found: '#{clue}' (#{v.id})")
       else
         logger.error("[NG] element not found: '#{clue}'".colorize(:red))
       end
@@ -110,12 +117,28 @@ module Selenium
     rescue WebElement::NotFound
       nil
     end
-    
-    # extend `post` to handle errors
-    protected def post(path, body = nil)
-      response = driver.post("/session/#{ id }#{ path }", body)
-      v = response["value"]
 
+    # extend `get` to handle errors and logging
+    protected def get(path = "")
+      logger.debug "GET '/session/#{ id }#{ path }'"
+
+      response = driver.get("/session/#{ id }#{ path }")
+      check_response!(response["value"])
+
+      return response["value"]
+    end
+
+    # extend `post` to handle errors and logging
+    protected def post(path, body = nil)
+      logger.debug "POST '/session/#{ id }#{ path }', body=#{body.inspect}"
+
+      response = driver.post("/session/#{ id }#{ path }", body)
+      check_response!(response["value"])
+
+      return response["value"]
+    end
+
+    protected def check_response!(v)
       case v
       when Hash
         # {"message" => "unknown error: session deleted because of page crash
@@ -125,8 +148,6 @@ module Selenium
           end
         end
       end
-
-      return v
     end
   end
 end

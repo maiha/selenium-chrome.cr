@@ -13,5 +13,20 @@ module Selenium
         @id = v.as(String)
       end
     end
+
+    ######################################################################
+    ### Input Elements
+    def selected? : Bool
+      get("/selected").as(Bool)
+    end
+
+    def value=(v)
+      post("/clear")
+      send_keys v
+    end
+
+    def value
+      attribute("value")
+    end
   end
 end

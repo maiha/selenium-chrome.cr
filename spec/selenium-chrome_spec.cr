@@ -46,6 +46,43 @@ describe Selenium::Chrome do
     end
   end
   
+  describe "#fill(css:xxx, value)" do
+    it "sets the value to the element, and returns the element" do
+      e = session.fill("css:input[name='q']", "selenium")
+      e.should be_a(Selenium::WebElement)
+    end
+  end
+
+  describe "#wait(condition)" do
+    it "waits until the condition becomes true" do
+      session.setting.element_timeout = 1.second
+      session.wait{ 1 == 1 }
+    end
+
+    it "raises timeout error when the condition doesn't be satisfied" do
+      session.setting.element_timeout = 1.second
+      expect_raises(Selenium::Error, /timeout/) do
+        session.wait{ session.url == "/" }
+      end
+    end
+  end
+
+  describe Selenium::WebElement do
+    describe "#value" do
+      it "returns the value of the element" do
+        session.find("css:input[name='q']").value.should eq("selenium")
+      end
+    end
+
+    describe "#value=(v)" do
+      it "sets the value to the element" do
+        q = session.find("css:input[name='q']")
+        q.value = "webdriver"
+        q.value.should eq("webdriver")
+      end
+    end
+  end
+  
   it "#close" do
     session.close
   end
