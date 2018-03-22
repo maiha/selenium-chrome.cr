@@ -1,4 +1,4 @@
-class Selenium::Chrome
+module Selenium::Chrome
   module Keys
     RETURN = "\u{6}"
   end

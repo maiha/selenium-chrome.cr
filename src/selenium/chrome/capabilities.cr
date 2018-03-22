@@ -1,4 +1,4 @@
-class Selenium::Chrome
+module Selenium::Chrome
   # `capabilities` setting is derived from
   # - https://github.com/amberframework/garnet-spec
   CAPABILITIES = {

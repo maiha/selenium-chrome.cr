@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-CURRENT_SESSION = Array(Selenium::Chrome).new
+CURRENT_SESSION = Array(Selenium::Session).new
 
 private def session
   if session = CURRENT_SESSION[-1]?
