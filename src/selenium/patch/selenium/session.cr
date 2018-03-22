@@ -1,13 +1,14 @@
-class Selenium::Chrome
-  module Dsl
+module Selenium
+  class Session
     ######################################################################
     ### Sessions
+
     def open(url : String)
-      @session.url = url
+      self.url = url
     end
 
     def close
-      @session.stop
+      stop
     end
 
     ######################################################################
@@ -35,48 +36,42 @@ class Selenium::Chrome
 
       # first, parse css where no prefix exists
       if css
-        return find_element!(:css, css, parent)
+        return find_element(:css, css, parent)
       end
 
       # second, parse id where it may contains prefix 'id:' or 'css:'
       case id
       when /^id:(.*)/
-        return find_element!(:id, $1, parent)
+        return find_element(:id, $1, parent)
       when /^css:(.*)/
-        return find_element!(:css, $1, parent)
+        return find_element(:css, $1, parent)
       end
 
       # third, parse as id for the case of invoking `find(id: "xxx")`
       if id
-        return find_element!(:id, id, parent)
+        return find_element(:id, id, parent)
       end
       
       # finally, we can't find any args about target
       raise ArgumentError.new("no element targets found")
     end
 
-    # override `find_element` to raise `ElementNotFound` when missing
-    def find_element!(by, selector, parent : WebElement? = nil) : WebElement
-      url = parent ? "/element/#{ parent.id }/element" : "/element"
-      value = post(url, {
-        using: WebElement.locator_for(by),
-        value: selector
-      })
+    # extend `post` to handle errors
+    protected def post(path, body = nil)
+      response = driver.post("/session/#{ id }#{ path }", body)
+      v = response["value"]
 
-      case value
+      case v
       when Hash
-        item = value
-        unless item["ELEMENT"]?
-          identifier = item.keys.find(&.starts_with?("element-"))
-          unless item[identifier]?
-            raise ElementNotFound.new("#{by}:#{selector}")
+        # {"message" => "unknown error: session deleted because of page crash
+        if msg = v["message"]?
+          if msg.to_s =~ /^unknown error:/
+            raise Error.new(msg.to_s)
           end
         end
       end
-                
-      WebElement.new(@session, value.as(Hash))
+
+      return v
     end
   end
-
-  include Dsl
 end

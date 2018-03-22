@@ -10,6 +10,9 @@ services:
     container_name: crystal
     image: crystallang/crystal:0.24.2
     command: crystal --version
+    environment:
+      SELENIUM_SERVER: selenium
+      SELENIUM_PORT: 4444
     volumes:
       - .:/mnt
     working_dir: /mnt

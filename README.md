@@ -27,8 +27,13 @@ require "selenium-chrome"
 
 session = Selenium::Chrome.new
 session.open "https://github.com/maiha/selenium-chrome.cr"
+
 h1 = session.find(css: "article>h1")
 p h1.text # => "selenium-chrome.cr"
+
+session.find(css: "xxx")  # raises Selenium::WebElement::NotFound
+session.find?(css: "xxx") # => nil
+
 session.close
 ```
 
