@@ -1,5 +1,6 @@
 require "spec"
 require "../src/selenium-chrome"
+require "file_utils"
 
 def selenium_host : String
   ENV["SELENIUM_SERVER"]? || "localhost"

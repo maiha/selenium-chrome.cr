@@ -10,7 +10,7 @@ class Selenium::Session
       end
 
       if started_at + setting.element_timeout < Time.now
-        raise Error.new("timeout: #{hint} (#{setting.element_timeout}))")
+        raise Error.new("timeout: #{hint} (#{setting.element_timeout})")
       end
       logger.debug "NG: #{hint} (retry after #{setting.wait_interval})"
       sleep setting.wait_interval
