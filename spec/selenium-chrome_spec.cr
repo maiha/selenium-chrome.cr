@@ -12,7 +12,9 @@ end
 
 describe Selenium::Chrome do
   it "#new" do
-    CURRENT_SESSION << Selenium::Chrome.new(selenium_driver)
+    s = Selenium::Chrome.new(selenium_driver)
+    s.logger = Logger.new(nil)
+    CURRENT_SESSION << s
   end
 
   it "#open" do

@@ -1,10 +1,28 @@
+require "./session/*"
+
 module Selenium
   class Session
     ######################################################################
     ### Sessions
 
-    def open(url : String)
+    def open(url : String, strict = false)
+      clue = "open: '#{url}'"
+      started_at = Time.now
+      logger.debug clue
       self.url = url
+
+      while true
+        current = self.url
+        if current == url || !strict
+          logger.info "[OK] #{clue}".colorize(:green)
+          return current
+        elsif started_at + setting.open_timeout < Time.now
+          raise Error.new("timeout: #{clue} (#{setting.open_timeout})")
+        else
+          logger.debug "#{clue}: waiting '#{current}' becomes '#{url}' (retry after #{setting.wait_interval})".colorize(:yellow)
+          sleep setting.wait_interval
+        end
+      end
     end
 
     def close
@@ -25,6 +43,10 @@ module Selenium
       find("#{by}:#{selector}", parent).send_keys(value)
     end
 
+    def fill(target : String, value, parent : WebElement? = nil)
+      find("#{target}", parent).send_keys(value)
+    end
+
     # def return(target : String, parent : WebElement? = nil)
     #   fill(target, Keys::RETURN, parent)
     # end
@@ -36,30 +58,50 @@ module Selenium
     # - `find("id:foo")`   # same as `find(id: "foo")`
     # - `find("css:foo")`  # same as `find(css: "foo")`
     def find(id : String? = nil, css : String? = nil, parent : WebElement? = nil) : WebElement
+      clue = nil
+      v : WebElement? = nil
       if id && css
         raise ArgumentError.new("both 'css:' and 'id:' exist")
       end
 
       # first, parse css where no prefix exists
       if css
-        return find_element(:css, css, parent)
+        clue = "css:#{css}"
+        v = find_element(:css, css, parent)
+        return v
       end
 
       # second, parse id where it may contains prefix 'id:' or 'css:'
       case id
       when /^id:(.*)/
-        return find_element(:id, $1, parent)
+        clue = "id:#{$1}"
+        v = find_element(:id, $1, parent)
+        return v
       when /^css:(.*)/
-        return find_element(:css, $1, parent)
+        clue = "css:#{$1}"
+        v = find_element(:css, $1, parent)
+        return v
       end
 
       # third, parse as id for the case of invoking `find(id: "xxx")`
       if id
-        return find_element(:id, id, parent)
+        clue = "id:#{id}"
+        v = find_element(:id, id, parent)
+        return v
       end
       
       # finally, we can't find any args about target
       raise ArgumentError.new("no element targets found")
+
+    rescue WebElement::NotFound
+      raise WebElement::NotFound.new(clue.to_s)
+
+    ensure
+      if v
+        logger.debug("element found: '#{clue}'")
+      else
+        logger.error("[NG] element not found: '#{clue}'".colorize(:red))
+      end
     end
 
     # `find?` acts same as `find` except it returns nil rather than raising error when the element is not found.
