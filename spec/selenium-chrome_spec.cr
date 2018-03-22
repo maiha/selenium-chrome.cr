@@ -34,12 +34,12 @@ describe Selenium::Chrome do
   end
 
   describe "#find?(css:xxx)" do
-    pending "returns WebElement when found" do
+    it "returns WebElement when found" do
       h1 = session.find?(css: "article>h1")
-      h1.text.should eq("selenium-chrome.cr")
+      h1.try(&.text).should eq("selenium-chrome.cr")
     end
 
-    pending "raises NotFound when not found" do
+    it "raises NotFound when not found" do
       session.find?(css: "article>h1>xxx").should eq(nil)
     end
   end

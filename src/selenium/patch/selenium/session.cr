@@ -29,6 +29,12 @@ module Selenium
     #   fill(target, Keys::RETURN, parent)
     # end
 
+    # `find` is a wrapper of `find_element` with accepting prefixed `css:` or `id:`
+    # - `find(id: "foo")`  # invokes `find_element(:id, "foo")`
+    # - `find(css: "foo")` # invokes `find_element(:css, "foo")`
+    # - `find("foo")`      # same as `find(id: "foo")`
+    # - `find("id:foo")`   # same as `find(id: "foo")`
+    # - `find("css:foo")`  # same as `find(css: "foo")`
     def find(id : String? = nil, css : String? = nil, parent : WebElement? = nil) : WebElement
       if id && css
         raise ArgumentError.new("both 'css:' and 'id:' exist")
@@ -56,6 +62,13 @@ module Selenium
       raise ArgumentError.new("no element targets found")
     end
 
+    # `find?` acts same as `find` except it returns nil rather than raising error when the element is not found.
+    def find?(*args, **opts)
+      find(*args, **opts)
+    rescue WebElement::NotFound
+      nil
+    end
+    
     # extend `post` to handle errors
     protected def post(path, body = nil)
       response = driver.post("/session/#{ id }#{ path }", body)
