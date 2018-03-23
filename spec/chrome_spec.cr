@@ -83,6 +83,19 @@ describe Selenium::Chrome do
     end
   end
   
+  describe "#download" do
+    pending "returns downloaded file as Bytes" do
+    end
+
+    it "raises timeout error when no files are downloaded" do
+      expect_raises(Selenium::Timeout) do
+        session.download(timeout: 1.second, ext: "foo") do
+          session.find("css:input[name='q']")
+        end
+      end
+    end
+  end
+
   it "#close" do
     session.close
   end

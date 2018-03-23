@@ -17,13 +17,13 @@ class Selenium::Chrome::Downloads
   getter dir : String
   getter files : Array(File) = Array(File).new
   
-  def initialize(@dir = DEFAULT_DIR, files : Array(File)? = nil, ext : String? = nil)
+  def initialize(@dir = DEFAULT_DIR, files : Array(File)? = nil, @ext : String? = nil)
     # seluser@188f16f355e6:~$ ls -l /home/seluser/Downloads
     # total 40
     # -rw-r--r-- 1 seluser seluser 35846 Mar 23 05:27 20180323052725.csv
     # -rw-r--r-- 1 seluser seluser     0 Mar 23 05:33 20180323053322.csv.crdownload
     @files = files || load
-    @files.select!(&.ext.== ext) if ext
+    @files.select!(&.ext.== @ext) if @ext
   end
 
   def load
@@ -33,6 +33,6 @@ class Selenium::Chrome::Downloads
   def -(other) : Downloads
     denied = other.files.map(&.name).to_set
     files  = @files.reject{|f| denied.includes?(f.name)}
-    return Downloads.new(dir, files)
+    return Downloads.new(dir, files, ext: @ext)
   end
 end

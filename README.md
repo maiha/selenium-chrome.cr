@@ -35,6 +35,14 @@ session.find?(css: "xxx")            # => nil
 session.close
 ```
 
+async downloader
+
+```crystal
+bytes = session.download(timeout: 60.seconds) {
+  session.find(css: "a>img[name='csv']").click
+}
+```
+
 ## Installation
 
 Add this to your application's `shard.yml`:

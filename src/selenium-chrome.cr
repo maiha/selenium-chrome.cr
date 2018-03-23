@@ -6,5 +6,5 @@ require "colorize"
 require "selenium"
 
 # library
-require "./selenium/patch/**"
 require "./selenium/chrome"
+require "./selenium/patch/**"
