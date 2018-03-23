@@ -23,100 +23,43 @@ describe Selenium::Chrome::Downloads do
       downloads.files.size.should eq(0)
     end
     
-    it "manages only files those filename contains 2000 years" do
-      write_file!("foo.txt")
-      write_file!("10010203040506.txt")
-
-      downloads = Selenium::Chrome::Downloads.new(dir)
-      downloads.files.size.should eq(0)
-
-      write_file!("20010203040506.txt")
-      downloads = Selenium::Chrome::Downloads.new(dir)
-      downloads.files.size.should eq(1)
-    end
-
     it "caches status of the filenames" do
       clear_directory!
 
       downloads = Selenium::Chrome::Downloads.new(dir)
       downloads.files.size.should eq(0)
 
-      write_file!("20010203040506.txt")
+      write_file!("foo.txt")
       downloads.files.size.should eq(0)
     end
   end
 
-  describe "#reload!" do
-    it "clear caches" do
+  describe "#-(other)" do
+    it "returns substitution" do
       clear_directory!
 
-      downloads = Selenium::Chrome::Downloads.new(dir)
-      write_file!("20010203040506.txt")
+      write_file!("foo.txt")
+      snapshot = Selenium::Chrome::Downloads.new(dir)
 
-      downloads.files.size.should eq(0)
-      downloads.reload!
-      downloads.files.size.should eq(1)
+      write_file!("bar.txt")
+      downloads = Selenium::Chrome::Downloads.new(dir)
+
+      (downloads - snapshot).files.map(&.name).should eq(["bar.txt"])
     end
   end
 
-  describe "#created" do
-    it "returns newly created filenames" do
+  describe ".new(ext: foo)" do
+    it "filters files by ext" do
       clear_directory!
 
-      future1 = Time.now + 1.minute
-      future2 = Time.now + 2.minute
-
-      write_file!(future1.to_s("%Y%m%d%H%M%S.txt"))
-
+      write_file!("foo.txt")
+      write_file!("bar.csv")
+      
       downloads = Selenium::Chrome::Downloads.new(dir)
+      downloads.files.size.should eq(2)
 
+      downloads = Selenium::Chrome::Downloads.new(dir, ext: "txt")
       downloads.files.size.should eq(1)
-      downloads.load.size.should eq(1)
-      downloads.created.size.should eq(0)
-
-      write_file!(future2.to_s("%Y%m%d%H%M%S.txt"))
-
-      downloads.files.size.should eq(1)
-      downloads.load.size.should eq(2)
-      downloads.created.size.should eq(1)
-    end
-
-    it "ignores old timestamp even if they are newly created" do
-      clear_directory!
-
-      future1 = Time.now + 1.minute
-      future2 = Time.now + 2.minute
-
-      write_file!(future2.to_s("%Y%m%d%H%M%S.txt"))
-
-      downloads = Selenium::Chrome::Downloads.new(dir)
-
-      downloads.files.size.should eq(1)
-      downloads.load.size.should eq(1)
-      downloads.created.size.should eq(0)
-
-      write_file!(future1.to_s("%Y%m%d%H%M%S.txt"))
-
-      downloads.files.size.should eq(1)
-      downloads.load.size.should eq(2)
-      downloads.created.size.should eq(0)
-    end
-
-    it "filters by given ext" do
-      clear_directory!
-
-      future1 = Time.now + 1.minute
-      future2 = Time.now + 2.minute
-
-      downloads = Selenium::Chrome::Downloads.new(dir)
-
-      write_file!(future1.to_s("%Y%m%d%H%M%S.txt"))
-      write_file!(future1.to_s("%Y%m%d%H%M%S.csv"))
-
-      downloads.files.size.should eq(0)
-      downloads.load.size.should eq(2)
-      downloads.created.size.should eq(2)
-      downloads.created("txt").size.should eq(1)
     end
   end
 end
