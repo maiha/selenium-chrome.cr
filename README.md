@@ -75,7 +75,7 @@ Add this to your application's `shard.yml`:
 dependencies:
   selenium-chrome:
     github: maiha/selenium-chrome.cr
-    version: 0.1.3
+    version: 0.1.4
 ```
 
 ## Development
