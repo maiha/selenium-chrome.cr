@@ -41,11 +41,27 @@ describe Selenium::Chrome do
       h1.try(&.text).should eq("selenium-chrome.cr")
     end
 
-    it "raises NotFound when not found" do
+    it "returns nil when not found" do
       session.find?(css: "article>h1>xxx").should eq(nil)
     end
   end
-  
+
+  describe "#find!(css:xxx)" do
+    it "returns WebElement when found" do
+      h1 = session.find!(css: "article>h1")
+      h1.try(&.text).should eq("selenium-chrome.cr")
+    end
+
+    it "raises Selenium::Timeout error when not found" do
+      session.setting.element_timeout = 1.second
+      started_at = Time.now
+      expect_raises(Selenium::Timeout) do
+        session.find!(css: "article>h1>xxx")
+      end
+      (started_at + 1.second <= Time.now).should be_true
+    end
+  end
+
   describe "#fill(css:xxx, value)" do
     it "sets the value to the element, and returns the element" do
       e = session.fill("css:input[name='q']", "selenium")

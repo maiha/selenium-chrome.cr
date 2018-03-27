@@ -118,6 +118,14 @@ module Selenium
       nil
     end
 
+    # `find!` acts same as `find` except it waits until it will be found.
+    # This is useful after a page transition or after the element has changed dynamically.
+    def find!(*args, **opts) : WebElement
+      t : WebElement? = nil
+      wait { t = find?(*args, **opts) }
+      return t.not_nil!
+    end
+    
     # extend `get` to handle errors and logging
     protected def get(path = "")
       logger.debug "GET '/session/#{ id }#{ path }'"

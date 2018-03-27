@@ -43,6 +43,13 @@ bytes = session.download(timeout: 60.seconds) {
 }
 ```
 
+`find!` waits until it will appear. This is useful after a page transition or after the element has changed dynamically.
+
+```crystal
+session.find("css:form").submit
+session.find!("id:welcome")
+```
+
 ## Installation
 
 Add this to your application's `shard.yml`:
