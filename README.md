@@ -50,6 +50,23 @@ session.find("css:form").submit
 session.find!("id:welcome")
 ```
 
+## API (Session)
+
+| method   | args                        | return value      | description                                          |
+|----------|-----------------------------|-------------------|------------------------------------------------------|
+| close    |                             | nil               | closes and deletes this session                      |
+| css      | *args                       | Array(WebElement) | shortcut for `find_elements(:css, *args)`            |
+| download | ext=nil, &block             | Bytes             | yields `block` and returns bytes of downloaded file  |
+| id       | *args                       | WebElement        | shortcut for `find(:id, *args)`                      |
+| fill     | target, value, parent=nil   | WebElement        | replace attribute:value                              |
+| fill!    | target, value, parent=nil   | WebElement        | works as `fill`,  then waits until value changed     |
+| find     | id=nil, css=nil, parent=nil | WebElement        | call `find_element`, or raises `ArgumentError`       |
+| find?    | id=nil, css=nil, parent=nil | WebElement?       | works as `find`, or returns nil                      |
+| find!    | id=nil, css=nil, parent=nil | WebElement        | works as `find`, then waits until it will appears    |
+| open     | url, strict=false           | nil               | visits url, then waits until url changed when strict |
+| wait     | &condition                  | nil               | waits until the `condition` becomes true             |
+
+
 ## Installation
 
 Add this to your application's `shard.yml`:

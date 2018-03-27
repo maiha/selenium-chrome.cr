@@ -31,11 +31,11 @@ module Selenium
 
     ######################################################################
     ### Syntax Sugar
-    def id(*args)
+    def id(*args) : WebElement
       find_element(:id, *args)
     end
 
-    def css(*args)
+    def css(*args) : Array(WebElement)
       find_elements(:css, *args)
     end
 
@@ -49,9 +49,10 @@ module Selenium
       return e
     end
 
-    def fill!(target : String, value, parent : WebElement? = nil)
+    def fill!(target : String, value, parent : WebElement? = nil) : WebElement
       e = fill(target, value, parent)
       wait { e.value == value }
+      return e
     end
 
     # def return(target : String, parent : WebElement? = nil)
