@@ -35,13 +35,18 @@ session.find?(css: "xxx")            # => nil
 session.close
 ```
 
-async downloader
+#### async downloader
 
 ```crystal
-bytes = session.download(timeout: 60.seconds) {
+bytes = session.download(timeout: 60.seconds, interval: 3.seconds) {
   session.find(css: "a>img[name='csv']").click
 }
 ```
+
+- When no `timeout` parameter is given, `Setting#download_timeout` is used.
+- When no `interval` parameter is given, `Setting#download_interval` is used.
+
+#### sync finder
 
 `find!` waits until it will appear. This is useful after a page transition or after the element has changed dynamically.
 

@@ -1,5 +1,4 @@
 # This class manages downloaded files.
-# We assume the syntax of "%Y%m%d%H%M%S.ext" for filenames.
 class Selenium::Chrome::Downloads
   # selenium/standalone-chrome-debug:3.11.0
   DEFAULT_DIR = "/home/seluser/Downloads"

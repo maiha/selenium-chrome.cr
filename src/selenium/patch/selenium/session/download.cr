@@ -8,6 +8,9 @@ class Selenium::Session
   end
 
   def download(ext : String? = nil, timeout : Time::Span? = nil, interval : Time::Span? = nil, &block : -> T) : Bytes forall T
+    timeout  ||= setting.download_timeout
+    interval ||= setting.download_interval
+      
     snapshot = downloads(ext: ext)
     block.call
     sleep 1
