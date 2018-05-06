@@ -28,5 +28,9 @@ module Selenium
     def value
       attribute("value")
     end
+
+    def html : String
+      attribute("innerHTML").to_s
+    end
   end
 end

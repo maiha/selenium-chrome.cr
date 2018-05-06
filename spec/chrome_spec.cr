@@ -97,6 +97,13 @@ describe Selenium::Chrome do
         q.value.should eq("webdriver")
       end
     end
+
+    describe "#html" do
+      it "returns the value of innerHTML" do
+        p = session.find("css:#readme > article > p:nth-child(2)")
+        p.html.should eq("A handy and thin wrapper for <code>selenium-webdriver-crystal</code>.")
+      end
+    end
   end
   
   describe "#download" do
