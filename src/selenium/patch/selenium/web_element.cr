@@ -16,8 +16,19 @@ module Selenium
 
     ######################################################################
     ### Input Elements
+    def select
+      return self if selected?
+      click
+    end
+
     def selected? : Bool
-      get("/selected").as(Bool)
+      v = get("/selected")
+      case v
+      when Bool
+        return v
+      else
+        raise Error.new("[BUG] expects Bool, but remote api('/selected') returns %s (%s)" % [v.class, v.inspect[0..60]])
+      end
     end
 
     def value=(v)

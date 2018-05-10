@@ -113,7 +113,7 @@ module Selenium
     end
 
     # `find?` acts same as `find` except it returns nil rather than raising error when the element is not found.
-    def find?(*args, **opts)
+    def find?(*args, **opts) : WebElement?
       find(*args, **opts)
     rescue WebElement::NotFound
       nil
@@ -126,7 +126,32 @@ module Selenium
       wait { t = find?(*args, **opts) }
       return t.not_nil!
     end
-    
+
+    # `select` is a shortcut for `find(...).select`
+    def select(*args, **opts) : WebElement
+      e = find(*args, **opts)
+      e.select
+      return e
+    end
+
+    # `select!` acts same as `select` except this ensures that
+    # the element is actually selected, otherwise raise an error.
+    def select!(*args, **opts) : WebElement
+      self.select(*args, **opts)
+      # refresh element by `find` to avoid 'stale element reference' error.
+      e = find(*args, **opts)
+      e.selected? || raise CannotSelect.new("select failed: element(#{args.inspect}, #{opts.inspect})")
+      return e
+    end
+
+    # `select?` acts same as `select` except this ensures that
+    # the element is actually selected, otherwise returns nil.
+    def select?(*args, **opts) : WebElement?
+      select!(*args, **opts)
+    rescue CannotSelect
+      return nil
+    end
+
     # extend `get` to handle errors and logging
     protected def get(path = "")
       logger.debug "GET '/session/#{ id }#{ path }'"

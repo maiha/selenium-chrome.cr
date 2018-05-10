@@ -69,6 +69,9 @@ session.find!("id:welcome")
 | find?    | id=nil, css=nil, parent=nil | WebElement?       | works as `find`, or returns nil                      |
 | find!    | id=nil, css=nil, parent=nil | WebElement        | works as `find`, then waits until it will appears    |
 | open     | url, strict=false           | nil               | visits url, then waits until url changed when strict |
+| select   | id=nil, css=nil, parent=nil | WebElement        | find and select|
+| select?  | id=nil, css=nil, parent=nil | WebElement?       | works as `select`, or returns nil                      |
+| select!  | id=nil, css=nil, parent=nil | WebElement        | works as `select` and esnures it is selected |
 | wait     | &condition                  | nil               | waits until the `condition` becomes true             |
 
 
