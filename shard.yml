@@ -7,6 +7,6 @@ authors:
 dependencies:
   selenium:
     github: ysbaddaden/selenium-webdriver-crystal
-    versin: "0.3.0"
+    commit: "24e15487ebc2dca0ea09600ca32652dc7b88a359"
               
 license: MIT

@@ -86,9 +86,11 @@ dependencies:
     version: 0.1.6
 ```
 
-## Development
+## Test
 
-TODO: Write development instructions here
+```console
+make test
+```
 
 ## Contributing
 
