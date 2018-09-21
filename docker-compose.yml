@@ -2,11 +2,11 @@ version: "2"
 
 services:
   selenium:
-    image: selenium/standalone-chrome-debug:3.11.0
+    image: selenium/standalone-chrome:3.11.0
     volumes:
       - /dev/shm:/dev/shm
   crystal:
-    image: crystallang/crystal:0.24.2
+    image: crystallang/crystal:0.26.1
     command: crystal --version
     environment:
       SELENIUM_SERVER: selenium

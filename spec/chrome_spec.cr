@@ -100,7 +100,7 @@ describe Selenium::Chrome do
 
     describe "#html" do
       it "returns the value of innerHTML" do
-        p = session.find("css:#readme > article > p:nth-child(2)")
+        p = session.find("css:#readme > div.Box-body.p-6 > article > p:nth-child(2)")
         p.html.should eq("A handy and thin wrapper for <code>selenium-webdriver-crystal</code>.")
       end
     end

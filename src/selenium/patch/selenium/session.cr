@@ -13,7 +13,7 @@ module Selenium
 
       while true
         current = self.url
-        if current == url || !strict
+        if current == url() || !strict
           logger.info "[OK] #{clue}".colorize(:green)
           return current
         elsif started_at + setting.open_timeout < Time.now

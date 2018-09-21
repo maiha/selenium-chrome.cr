@@ -2,7 +2,7 @@
 
 A handy and thin wrapper for `selenium-webdriver-crystal`.
 
-- crystal: 0.24.2
+- crystal: 0.26.1
 
 ## Component
 
