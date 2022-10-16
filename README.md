@@ -83,7 +83,7 @@ Add this to your application's `shard.yml`:
 dependencies:
   selenium-chrome:
     github: maiha/selenium-chrome.cr
-    version: 0.2.0
+    version: 0.3.2
 ```
 
 ## Test
