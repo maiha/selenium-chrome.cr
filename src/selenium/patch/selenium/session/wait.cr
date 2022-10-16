@@ -5,14 +5,14 @@ class Selenium::Session
     timeout  ||= setting.element_timeout
     interval ||= setting.wait_interval
 
-    started_at = Time.now
+    started_at = Time.local
     while true
       if condition.call
         logger.debug "OK: #{hint}"
         break
       end
 
-      if started_at + timeout < Time.now
+      if started_at + timeout < Time.local
         raise Timeout.new("timeout: #{hint} (#{timeout})")
       end
       logger.debug "NG: #{hint} (retry after #{interval})"

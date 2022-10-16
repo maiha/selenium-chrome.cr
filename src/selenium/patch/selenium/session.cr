@@ -7,7 +7,7 @@ module Selenium
 
     def open(url : String, strict = false)
       clue = "open: '#{url}'"
-      started_at = Time.now
+      started_at = Time.local
       logger.debug clue
       self.url = url
 
@@ -16,7 +16,7 @@ module Selenium
         if current == url() || !strict
           logger.info "[OK] #{clue}".colorize(:green)
           return current
-        elsif started_at + setting.open_timeout < Time.now
+        elsif started_at + setting.open_timeout < Time.local
           raise Error.new("timeout: #{clue} (#{setting.open_timeout})")
         else
           logger.debug "#{clue}: waiting '#{current}' becomes '#{url}' (retry after #{setting.wait_interval})".colorize(:yellow)

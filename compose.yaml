@@ -6,7 +6,7 @@ services:
     volumes:
       - /dev/shm:/dev/shm
   crystal:
-    image: crystallang/crystal:0.32.0
+    image: crystallang/crystal:1.6.0-alpine
     command: crystal --version
     environment:
       SELENIUM_SERVER: selenium

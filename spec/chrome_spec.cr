@@ -54,11 +54,11 @@ describe Selenium::Chrome do
 
     it "raises Selenium::Timeout error when not found" do
       session.setting.element_timeout = 1.second
-      started_at = Time.now
+      started_at = Time.local
       expect_raises(Selenium::Timeout) do
         session.find!(css: "article>h1>xxx")
       end
-      (started_at + 1.second <= Time.now).should be_true
+      (started_at + 1.second <= Time.local).should be_true
     end
   end
 

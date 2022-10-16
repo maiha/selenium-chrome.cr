@@ -7,6 +7,8 @@ authors:
 dependencies:
   selenium:
     github: ysbaddaden/selenium-webdriver-crystal
-    version: "0.4.0"
+
+  logger:
+    github: crystal-lang/logger.cr
               
 license: MIT

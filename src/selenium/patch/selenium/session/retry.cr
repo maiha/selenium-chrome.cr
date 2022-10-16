@@ -2,7 +2,7 @@ require "./setting"
 
 class Selenium::Session
   protected def retry(hint : String? = nil, &block : -> T) forall T
-    started_at = Time.now
+    started_at = Time.local
     v : T? = nil
     while true
       begin
@@ -10,7 +10,7 @@ class Selenium::Session
         logger.debug "OK: #{hint}"
         break
       rescue err : WebElement::NotFound
-        if started_at + @setting.element_timeout < Time.now
+        if started_at + @setting.element_timeout < Time.local
           raise err
         end
         logger.debug "NG: #{hint} #{err.class} (retry after #{@setting.element_wait_interval})"
