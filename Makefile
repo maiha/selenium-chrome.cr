@@ -1,8 +1,8 @@
 SHELL=/bin/bash
 
 VERSION=
-CURRENT_VERSION=$(shell git tag -l | sort -V | tail -1)
-GUESSED_VERSION=$(shell git tag -l | sort -V | tail -1 | awk 'BEGIN { FS="." } { $$3++; } { printf "%d.%d.%d", $$1, $$2, $$3 }')
+CURRENT_VERSION=$(shell git tag -l | sort -V | tail -1 | sed -e 's/^v//')
+GUESSED_VERSION=$(shell git tag -l | sort -V | tail -1 | sed -e 's/^v//' | awk 'BEGIN { FS="." } { $$3++; } { printf "%d.%d.%d", $$1, $$2, $$3 }')
 
 .SHELLFLAGS = -o pipefail -c
 
